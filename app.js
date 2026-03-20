@@ -24,17 +24,7 @@ window.addEventListener('DOMContentLoaded', () => deviceDetector.updateDeviceCla
 // Actualizar clase de dispositivo cuando cambia el tamaño de la ventana (responsive)
 window.addEventListener('resize', () => deviceDetector.updateDeviceClass());
 
-// ========== CONFIGURACIÓN DE RUTAS Y LÍMITES ==========
-// Detectar si estamos en GitHub Pages y ajustar rutas
-const getBasePath = () => {
-  const path = window.location.pathname;
-  if (path.includes('/paisajesonoro/')) {
-    return '/paisajesonoro';
-  }
-  return '';
-};
-
-const BASE_PATH = getBasePath();
+// ========== CONFIGURACIÓN DE LÍMITES ==========
 const MAX_AUDIO_DURATION = 30; // Máximo 30 segundos por audio
 
 // ========== ESTADO GLOBAL DE LA APLICACIÓN ==========
@@ -142,21 +132,19 @@ async function playPreview(audioFile, btnElement) {
     // Cargar audio si no está en cache
     if (!audioCache[audioFile]) {
       try {
-        // Intentar cargar con el nombre exacto
-        let response = await fetch(`${BASE_PATH}/${audioFile}`);
+        let response = await fetch(`/${audioFile}`);
         
-        // Si no existe, intentar con diferentes variaciones
         if (!response.ok) {
-          response = await fetch(`${BASE_PATH}/${audioFile.toLowerCase()}`);
+          response = await fetch(`/${audioFile.toLowerCase()}`);
         }
         
         if (!response.ok) {
-          throw new Error(`HTTP ${response.status} para ${audioFile}`);
+          throw new Error(`HTTP ${response.status}`);
         }
         
         const arrayBuffer = await response.arrayBuffer();
         if (arrayBuffer.byteLength === 0) {
-          throw new Error(`Archivo vacío: ${audioFile}`);
+          throw new Error('Archivo vacío');
         }
         
         audioCache[audioFile] = await audioContext.decodeAudioData(arrayBuffer);
@@ -298,11 +286,11 @@ async function loadAudioAndAddClip(audioFile, trackId, position) {
     if (!audioCache[audioFile]) {
       try {
         // Intentar cargar con el nombre exacto
-        let response = await fetch(`${BASE_PATH}/${audioFile}`);
+        let response = await fetch(`/${audioFile}`);
         
         // Si no existe, intentar con diferentes variaciones
         if (!response.ok) {
-          response = await fetch(`${BASE_PATH}/${audioFile.toLowerCase()}`);
+          response = await fetch(`/${audioFile.toLowerCase()}`);
         }
         
         if (!response.ok) {
