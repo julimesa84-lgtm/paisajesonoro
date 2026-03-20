@@ -539,44 +539,52 @@ body {
 /* ========== MOBILE STYLES (480px) ========== */
 @media (max-width: 768px) {
   .header {
-    padding: 10px 12px;
+    padding: 12px 14px;
+    gap: 8px;
   }
 
   .header h1 {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .header .subtitle {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .header .credit {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .header .description {
     display: block;
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .toggle-panel-btn {
     display: block;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 24px;
   }
 
   .close-panel-btn {
     display: block;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   /* Panel Overlay */
   .audio-panel {
     position: fixed;
-    left: -280px;
+    left: -85vw;
     top: 0;
     bottom: 0;
+    width: 85vw;
     height: 100%;
     z-index: 100;
     border-right: 2px solid #4a9eff;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    background: white;
   }
 
   .audio-panel.open {
@@ -588,17 +596,19 @@ body {
   }
 
   .controls {
-    gap: 2px;
-    padding: 6px 8px;
-    justify-content: flex-start;
+    gap: 4px;
+    padding: 10px;
+    justify-content: center;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    flex-wrap: wrap;
   }
 
   .controls button {
-    font-size: 12px;
-    padding: 6px 10px;
-    min-height: 36px;
+    font-size: 14px;
+    padding: 8px 12px;
+    min-height: 44px;
+    min-width: 44px;
     flex-shrink: 0;
   }
 
@@ -607,82 +617,150 @@ body {
   }
 
   .info-panel {
-    font-size: 10px;
-    padding: 6px 10px;
+    font-size: 12px;
+    padding: 10px 12px;
+    background: rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .ruler {
-    height: 24px;
-  }
-
-  .ruler-mark {
-    height: 24px;
-    font-size: 8px;
-    padding-top: 7px;
-  }
-
-  .playhead {
-    top: 24px;
-  }
-
-  .track {
-    margin-bottom: 10px;
-    padding: 6px;
-    min-height: 45px;
-  }
-
-  .track-header {
-    font-size: 11px;
-    margin-bottom: 4px;
-  }
-
-  .track-content {
     height: 32px;
   }
 
+  .ruler-mark {
+    height: 32px;
+    font-size: 10px;
+    padding-top: 8px;
+  }
+
+  .playhead {
+    top: 32px;
+  }
+
+  .track {
+    margin-bottom: 12px;
+    padding: 8px;
+    min-height: 56px;
+    border: 1px solid rgba(74, 158, 255, 0.3);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.8);
+  }
+
+  .track-header {
+    font-size: 13px;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #1a3a52;
+  }
+
+  .track-content {
+    height: 40px;
+    background: rgba(74, 158, 255, 0.1);
+    border-radius: 4px;
+  }
+
   .audio-clip {
-    font-size: 9px;
-    padding: 2px 4px;
+    font-size: 11px;
+    padding: 3px 6px;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
   }
 
   .clip-close {
-    width: 16px;
-    height: 16px;
-    font-size: 10px;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
   }
 
   .tracks-container {
+    padding: 12px;
+  }
+
+  .editor {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .timeline {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Audio Panel mejorado */
+  .panel-header {
+    padding: 12px;
+    border-bottom: 2px solid #4a9eff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .panel-header h2 {
+    font-size: 16px;
+    margin: 0;
+    color: #1a3a52;
+  }
+
+  .audio-panel input {
+    margin: 10px;
+    font-size: 14px;
     padding: 10px;
+    min-height: 44px;
+  }
+
+  .audio-item-wrapper {
+    gap: 8px;
+    margin: 8px 10px;
+  }
+
+  .audio-item {
+    font-size: 13px;
+    padding: 12px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .preview-btn {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 16px;
   }
 }
 
 /* ========== SMALL MOBILE (380px) ========== */
 @media (max-width: 480px) {
   .header {
-    padding: 8px 10px;
+    padding: 10px 12px;
   }
 
   .header-top {
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
 
   .header h1 {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .header .subtitle {
-    font-size: 9px;
+    font-size: 10px;
     margin: 2px 0 0 0;
   }
 
   .header .credit {
-    font-size: 8px;
+    font-size: 9px;
     margin: 1px 0 0 0;
   }
 
   .header .description {
-    font-size: 8px;
+    font-size: 9px;
     margin: 2px 0 0 0;
+  }
+
+  .toggle-panel-btn {
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .audio-panel {
@@ -691,60 +769,76 @@ body {
   }
 
   .controls {
-    gap: 2px;
-    padding: 4px 6px;
+    gap: 4px;
+    padding: 10px;
+    flex-wrap: wrap;
   }
 
   .controls button {
-    font-size: 11px;
-    padding: 4px 8px;
-    min-height: 34px;
+    font-size: 13px;
+    padding: 8px 12px;
+    min-height: 44px;
+    min-width: 44px;
   }
 
   .info-panel {
-    font-size: 9px;
-    padding: 4px 8px;
+    font-size: 11px;
+    padding: 10px 12px;
   }
 
-  .track {
-    margin-bottom: 8px;
-    padding: 4px;
-    min-height: 40px;
-  }
-
-  .track-header {
-    font-size: 10px;
-  }
-
-  .track-content {
+  .ruler {
     height: 28px;
   }
 
+  .track {
+    margin-bottom: 12px;
+    padding: 8px;
+    min-height: 52px;
+    border: 1px solid rgba(74, 158, 255, 0.3);
+    border-radius: 4px;
+  }
+
+  .track-header {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .track-content {
+    height: 36px;
+    background: rgba(74, 158, 255, 0.1);
+    border-radius: 3px;
+  }
+
   .audio-clip {
-    font-size: 8px;
-    padding: 1px 3px;
+    font-size: 10px;
+    padding: 2px 4px;
+    min-height: 22px;
   }
 
   .clip-close {
-    width: 14px;
-    height: 14px;
-    font-size: 9px;
+    width: 16px;
+    height: 16px;
+    font-size: 11px;
   }
 
   .preview-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 13px;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 14px;
   }
 
   .audio-item {
-    font-size: 11px;
-    padding: 8px;
+    font-size: 12px;
+    padding: 10px;
+    min-height: 44px;
   }
 
   .audio-panel input {
-    font-size: 12px;
-    padding: 8px 10px;
+    font-size: 13px;
+    padding: 10px;
+    margin: 10px;
+    min-height: 44px;
   }
 }
 
