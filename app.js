@@ -24,6 +24,19 @@ window.addEventListener('DOMContentLoaded', () => deviceDetector.updateDeviceCla
 // Actualizar clase de dispositivo cuando cambia el tamaño de la ventana (responsive)
 window.addEventListener('resize', () => deviceDetector.updateDeviceClass());
 
+// ========== CONFIGURACIÓN DE RUTAS Y LÍMITES ==========
+// Detectar si estamos en GitHub Pages y ajustar rutas
+const getBasePath = () => {
+  const path = window.location.pathname;
+  if (path.includes('/paisajesonoro/')) {
+    return '/paisajesonoro';
+  }
+  return '';
+};
+
+const BASE_PATH = getBasePath();
+const MAX_AUDIO_DURATION = 30; // Máximo 30 segundos por audio
+
 // ========== ESTADO GLOBAL DE LA APLICACIÓN ==========
 // Estado global de la aplicación
 let AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -129,25 +142,27 @@ async function playPreview(audioFile, btnElement) {
     // Cargar audio si no está en cache
     if (!audioCache[audioFile]) {
       try {
-        let response = await fetch(`/${audioFile}`);
+        // Intentar cargar con el nombre exacto
+        let response = await fetch(`${BASE_PATH}/${audioFile}`);
         
+        // Si no existe, intentar con diferentes variaciones
         if (!response.ok) {
-          response = await fetch(`/${audioFile.toLowerCase()}`);
+          response = await fetch(`${BASE_PATH}/${audioFile.toLowerCase()}`);
         }
         
         if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
+          throw new Error(`HTTP ${response.status} para ${audioFile}`);
         }
         
         const arrayBuffer = await response.arrayBuffer();
         if (arrayBuffer.byteLength === 0) {
-          throw new Error('Archivo vacío');
+          throw new Error(`Archivo vacío: ${audioFile}`);
         }
         
         audioCache[audioFile] = await audioContext.decodeAudioData(arrayBuffer);
       } catch (error) {
         console.error('Error cargando preview:', error);
-        alert('No se pudo cargar el audio para preview');
+        alert('No se pudo cargar el audio: ' + audioFile);
         return;
       }
     }
@@ -283,11 +298,11 @@ async function loadAudioAndAddClip(audioFile, trackId, position) {
     if (!audioCache[audioFile]) {
       try {
         // Intentar cargar con el nombre exacto
-        let response = await fetch(`/${audioFile}`);
+        let response = await fetch(`${BASE_PATH}/${audioFile}`);
         
         // Si no existe, intentar con diferentes variaciones
         if (!response.ok) {
-          response = await fetch(`/${audioFile.toLowerCase()}`);
+          response = await fetch(`${BASE_PATH}/${audioFile.toLowerCase()}`);
         }
         
         if (!response.ok) {
@@ -314,7 +329,12 @@ async function loadAudioAndAddClip(audioFile, trackId, position) {
     }
     
     const audioBuffer = audioCache[audioFile];
-    const duration = audioBuffer.duration;
+    let duration = audioBuffer.duration;
+    
+    // Limitar a 30 segundos máximo
+    if (duration > MAX_AUDIO_DURATION) {
+      duration = MAX_AUDIO_DURATION;
+    }
     
     addClipToTrack(trackId, audioFile, position, duration, audioBuffer);
     updateCompositionInfo();
