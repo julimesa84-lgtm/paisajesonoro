@@ -132,10 +132,12 @@ async function playPreview(audioFile, btnElement) {
     // Cargar audio si no está en cache
     if (!audioCache[audioFile]) {
       try {
-        let response = await fetch(`/${audioFile}`);
+        // Intentar cargar con ruta relativa (funciona en ambos: localhost y GitHub Pages)
+        let response = await fetch(audioFile);
         
+        // Si no existe, intentar con lowercase
         if (!response.ok) {
-          response = await fetch(`/${audioFile.toLowerCase()}`);
+          response = await fetch(audioFile.toLowerCase());
         }
         
         if (!response.ok) {
@@ -285,12 +287,12 @@ async function loadAudioAndAddClip(audioFile, trackId, position) {
   try {
     if (!audioCache[audioFile]) {
       try {
-        // Intentar cargar con el nombre exacto
-        let response = await fetch(`/${audioFile}`);
+        // Intentar cargar con ruta relativa (funciona en ambos: localhost y GitHub Pages)
+        let response = await fetch(audioFile);
         
-        // Si no existe, intentar con diferentes variaciones
+        // Si no existe, intentar con lowercase
         if (!response.ok) {
-          response = await fetch(`/${audioFile.toLowerCase()}`);
+          response = await fetch(audioFile.toLowerCase());
         }
         
         if (!response.ok) {
