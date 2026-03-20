@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uniendo Sedes a través del Paisaje Sonoro - Fundación Universitaria Bellas Artes - Semillero de Investigación Creación en Música. 2026 - Compilado por Juliana Mesa Jaramillo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header compacto para mobile -->
+    <header class="header">
+      <div class="header-top">
+        <button id="togglePanelBtn" class="toggle-panel-btn" title="Toggle panel">☰</button>
+        <h1>🎵 Paisaje Sonoro</h1>
+        <div style="width: 40px;"></div>
+      </div>
+      <p class="subtitle">Fundación Universitaria Bellas Artes</p>
+      <p class="credit">Semillero de Investigación - 2026</p>
+      <p class="description">Arrastra audios a la línea de tiempo</p>
+    </header>
+
+    <div class="main-content">
+      <!-- Panel lateral de audios (mobile: overlay) -->
+      <aside class="audio-panel" id="audioPanel">
+        <div class="panel-header">
+          <h2>Audios</h2>
+          <button id="closePanelBtn" class="close-panel-btn" title="Cerrar">✕</button>
+        </div>
+        <input type="text" id="searchInput" placeholder="Buscar audio...">
+        <div id="audiosList" class="audios-list"></div>
+      </aside>
+
+      <!-- Overlay para mobile -->
+      <div class="panel-overlay" id="panelOverlay"></div>
+
+      <!-- Área principal de la línea de tiempo -->
+      <main class="editor">
+        <!-- Controles principales -->
+        <div class="controls">
+          <button id="playBtn" class="play-btn" title="Reproducir">▶</button>
+          <button id="pauseBtn" class="pause-btn" title="Pausar">⏸</button>
+          <button id="stopBtn" class="stop-btn" title="Detener">⏹</button>
+          <span class="controls-divider"></span>
+          <button id="addTrackBtn" class="add-track-btn" title="Añadir pista">➕</button>
+          <span class="controls-divider"></span>
+          <button id="exportBtn" class="export-btn" title="Descargar">💾</button>
+          <button id="importBtn" class="import-btn" title="Cargar">📂</button>
+          <button id="clearBtn" class="clear-btn" title="Limpiar">🗑</button>
+        </div>
+
+        <!-- Información de la composición -->
+        <div class="info-panel">
+          <span id="compositionInfo">0s | 0 audios | 1 pista</span>
+          <span id="currentTime">00:00</span>
+        </div>
+
+        <!-- Línea de tiempo -->
+        <div class="timeline">
+          <div class="ruler" id="ruler"></div>
+          <div class="playhead" id="playhead"></div>
+          <div class="tracks-container" id="tracksContainer"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <input type="file" id="importFile" style="display: none;" accept=".json">
+  <script src="app.js"></script>
+</body>
+</html>
