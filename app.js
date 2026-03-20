@@ -1,3 +1,30 @@
+// ========== DETECCIÓN AUTOMÁTICA DE DISPOSITIVO ==========
+// Sistema de detección responsiva automática
+const deviceDetector = {
+  isMobile: () => window.innerWidth <= 768,
+  isTablet: () => window.innerWidth > 768 && window.innerWidth <= 1024,
+  isDesktop: () => window.innerWidth > 1024,
+  
+  updateDeviceClass() {
+    const body = document.body;
+    body.classList.remove('device-mobile', 'device-tablet', 'device-desktop');
+    
+    if (this.isMobile()) {
+      body.classList.add('device-mobile');
+    } else if (this.isTablet()) {
+      body.classList.add('device-tablet');
+    } else {
+      body.classList.add('device-desktop');
+    }
+  }
+};
+
+// Actualizar clase de dispositivo al cargar
+window.addEventListener('DOMContentLoaded', () => deviceDetector.updateDeviceClass());
+// Actualizar clase de dispositivo cuando cambia el tamaño de la ventana (responsive)
+window.addEventListener('resize', () => deviceDetector.updateDeviceClass());
+
+// ========== ESTADO GLOBAL DE LA APLICACIÓN ==========
 // Estado global de la aplicación
 let AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioContext = new AudioContext();
@@ -11,6 +38,14 @@ let isPlaying = false;
 let startTime = 0;
 let playbackOffset = 0;
 let trackCount = 1;
+
+// Audios con volumen aumentado en 50%
+const highVolumeAudios = ['CUERDA1.WAV', 'cuerdas.wav', 'cuerdas2.wav', 'campanita.wav'];
+
+// Función auxiliar para obtener volumen
+function getVolumeForAudio(audioFile) {
+  return highVolumeAudios.includes(audioFile) ? 1.5 : 1.0;
+}
 
 // Obtener lista de audios del servidor
 async function loadAudiosList() {
@@ -121,7 +156,12 @@ async function playPreview(audioFile, btnElement) {
     const audioBuffer = audioCache[audioFile];
     previewSource = audioContext.createBufferSource();
     previewSource.buffer = audioBuffer;
-    previewSource.connect(audioContext.destination);
+    
+    // Crear GainNode para control de volumen
+    const gainNode = audioContext.createGain();
+    gainNode.gain.value = getVolumeForAudio(audioFile);
+    previewSource.connect(gainNode);
+    gainNode.connect(audioContext.destination);
     
     // Cambiar estado del botón
     btnElement.textContent = '⏸';
@@ -454,7 +494,12 @@ function play() {
       if (clipEnd > startPosition && clipStart < composition.duration) {
         const source = audioContext.createBufferSource();
         source.buffer = clip.buffer;
-        source.connect(audioContext.destination);
+        
+        // Crear GainNode para control de volumen
+        const gainNode = audioContext.createGain();
+        gainNode.gain.value = getVolumeForAudio(clip.file);
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
         
         // Calcular offset dentro del clip
         const offsetInClip = Math.max(0, startPosition - clipStart);
@@ -661,6 +706,18 @@ document.addEventListener('DOMContentLoaded', () => {
     panelOverlay.addEventListener('click', closeMobilePanel);
   }
   
+  // ========== DETECCIÓN DE CAMBIOS DE ORIENTACIÓN ==========
+  window.addEventListener('orientationchange', () => {
+    // Re-detectar dispositivo cuando cambia la orientación
+    setTimeout(() => {
+      deviceDetector.updateDeviceClass();
+      // Cerrar panel si estaba abierto al cambiar orientación
+      if (mobilePanelOpen) {
+        closeMobilePanel();
+      }
+    }, 100);
+  });
+  
   // Cerrar panel al seleccionar un audio
   const audioItems = document.querySelectorAll('.audio-item');
   audioItems.forEach(item => {
@@ -672,7 +729,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const tracksContainer = document.getElementById('tracksContainer');
   tracksContainer.addEventListener('dragover', onTracksContainerDragOver);
   tracksContainer.addEventListener('dragleave', onTracksContainerDragLeave);
-  tracksContainer.addEventListener('drop', onTrackDrop);
   
   // Click en la línea de tiempo para posicionar el playhead
   const timeline = document.querySelector('.timeline');
